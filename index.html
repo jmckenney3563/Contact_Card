@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>John McKenney – Cybersecurity Contact Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  body {
+    background: #020b14;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    overflow: hidden;
+  }
+ 
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,180,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,180,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridPulse 8s ease-in-out infinite;
+    z-index: 0;
+  }
+ 
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+ 
+  /* Scan line */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -100%;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00ffb4, #00e5ff, #00ffb4, transparent);
+    animation: scanLine 5s linear infinite;
+    z-index: 1;
+    opacity: 0.6;
+  }
+ 
+  @keyframes scanLine {
+    0% { top: -2%; }
+    100% { top: 102%; }
+  }
+ 
+  .card-wrapper {
+    position: relative;
+    z-index: 2;
+    animation: cardReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+ 
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+ 
+  .card {
+    position: relative;
+    width: 680px;
+    background: linear-gradient(145deg, #051220 0%, #030d1a 50%, #061828 100%);
+    border: 1px solid rgba(0,255,180,0.25);
+    border-radius: 2px;
+    padding: 48px 52px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(0,229,255,0.08),
+      0 0 60px rgba(0,255,180,0.06),
+      0 30px 80px rgba(0,0,0,0.7),
+      inset 0 1px 0 rgba(0,255,180,0.15);
+  }
+ 
+  /* Corner brackets */
+  .card::before, .card::after,
+  .card-corner-br, .card-corner-tl {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-color: #00ffb4;
+    border-style: solid;
+  }
+  .card::before {
+    top: 12px; left: 12px;
+    border-width: 2px 0 0 2px;
+  }
+  .card::after {
+    top: 12px; right: 12px;
+    border-width: 2px 2px 0 0;
+  }
+  .card-corner-br {
+    bottom: 12px; right: 12px;
+    border-width: 0 2px 2px 0;
+  }
+  .card-corner-tl {
+    bottom: 12px; left: 12px;
+    border-width: 0 0 2px 2px;
+  }
+ 
+  /* Diagonal accent line */
+  .diagonal-line {
+    position: absolute;
+    top: 0; right: 80px;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,255,180,0.12) 30%, rgba(0,229,255,0.18) 70%, transparent 100%);
+    transform: skewX(-8deg);
+    transform-origin: top;
+  }
+ 
+  /* Glow orb */
+  .glow-orb {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,229,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+ 
+  /* Header section */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both;
+  }
+ 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  .identity {
+    flex: 1;
+  }
+ 
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #00ffb4;
+    text-transform: uppercase;
+  }
+ 
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background: #00ffb4;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00ffb4;
+    animation: blink 2s ease-in-out infinite;
+  }
+ 
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+ 
+  .name {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 32px;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    color: #f0fbff;
+    text-shadow: 0 0 30px rgba(0,229,255,0.3);
+    margin-bottom: 6px;
+  }
+ 
+  .name span {
+    color: #00e5ff;
+  }
+ 
+  .title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    font-size: 15px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(200,230,240,0.6);
+    margin-bottom: 4px;
+  }
+ 
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0;
+    animation: fadeUp 0.8s 0.5s cubic-bezier(0.16,1,0.3,1) both;
+  }
+ 
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(0,255,180,0.5), rgba(0,229,255,0.2), transparent);
+  }
+ 
+  .divider-icon {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: rgba(0,255,180,0.5);
+    letter-spacing: 0.1em;
+  }
+ 
+  /* Specializations */
+  .specializations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s 0.55s cubic-bezier(0.16,1,0.3,1) both;
+  }
+ 
+  .spec-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 14px;
+    border: 1px solid rgba(0,229,255,0.3);
+    color: #00e5ff;
+    background: rgba(0,229,255,0.06);
+    text-transform: uppercase;
+    position: relative;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: all 0.3s ease;
+  }
+ 
+  .spec-tag:hover {
+    background: rgba(0,229,255,0.14);
+    border-color: rgba(0,229,255,0.7);
+    box-shadow: 0 0 14px rgba(0,229,255,0.2);
+    color: #fff;
+  }
+ 
+  /* Main content row */
+  .main-row {
+    display: flex;
+    gap: 36px;
+    align-items: flex-start;
+    animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) both;
+  }
+ 
+  /* QR section */
+  .qr-section {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+ 
+  .qr-frame {
+    position: relative;
+    padding: 10px;
+    background: #f8fcff;
+    border: 1px solid rgba(0,255,180,0.3);
+    box-shadow:
+      0 0 0 1px rgba(0,229,255,0.15),
+      0 0 20px rgba(0,255,180,0.1),
+      inset 0 0 20px rgba(0,229,255,0.04);
+    border-radius: 2px;
+  }
+ 
+  .qr-frame::before, .qr-frame::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+  }
+  .qr-frame::before {
+    top: -1px; left: -1px;
+    border-top: 2px solid #00ffb4;
+    border-left: 2px solid #00ffb4;
+  }
+  .qr-frame::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 2px solid #00ffb4;
+    border-right: 2px solid #00ffb4;
+  }
+ 
+  .qr-frame img {
+    display: block;
+    width: 148px;
+    height: 148px;
+    image-rendering: pixelated;
+  }
+ 
+  .qr-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: rgba(0,255,180,0.6);
+    text-transform: uppercase;
+    text-align: center;
+  }
+ 
+  /* Info section */
+  .info-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 4px;
+  }
+ 
+  .portfolio-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: rgba(200,225,240,0.55);
+    text-transform: uppercase;
+    margin-bottom: -6px;
+  }
+ 
+  .portfolio-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(240,248,255,0.9);
+    line-height: 1.3;
+  }
+ 
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid rgba(0,229,255,0.15);
+    background: rgba(0,229,255,0.03);
+    position: relative;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+ 
+  .contact-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, #00ffb4, #00e5ff);
+  }
+ 
+  .contact-item:hover {
+    background: rgba(0,229,255,0.08);
+    border-color: rgba(0,229,255,0.4);
+    box-shadow: 0 0 20px rgba(0,229,255,0.08);
+  }
+ 
+  .contact-icon {
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+ 
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+ 
+  .contact-platform {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: #00ffb4;
+    text-transform: uppercase;
+  }
+ 
+  .contact-value {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: rgba(200,230,250,0.85);
+  }
+ 
+  /* Footer */
+  .card-footer {
+    margin-top: 30px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0,255,180,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeUp 0.8s 0.75s cubic-bezier(0.16,1,0.3,1) both;
+  }
+ 
+  .footer-id {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: rgba(0,255,180,0.3);
+    text-transform: uppercase;
+  }
+ 
+  .footer-tagline {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: rgba(0,229,255,0.25);
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+ 
+<div class="card-wrapper">
+  <div class="card">
+    <!-- Decorative elements -->
+    <div class="card-corner-br"></div>
+    <div class="card-corner-tl"></div>
+    <div class="diagonal-line"></div>
+    <div class="glow-orb"></div>
+ 
+    <!-- Header -->
+    <div class="header">
+      <div class="identity">
+        <div class="status-indicator">
+          <span class="status-dot"></span>
+          <span>Active · Threat Analyst</span>
+        </div>
+        <div class="name">John <span>McKenney</span></div>
+        <div class="title">Cybersecurity Analyst</div>
+      </div>
+    </div>
+ 
+    <!-- Divider -->
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-icon">// SPECIALIZATIONS //</div>
+      <div class="divider-line" style="background: linear-gradient(270deg, rgba(0,255,180,0.5), rgba(0,229,255,0.2), transparent);"></div>
+    </div>
+ 
+    <!-- Specializations -->
+    <div class="specializations">
+      <div class="spec-tag">Threat Hunting</div>
+      <div class="spec-tag">Detection Engineering</div>
+      <div class="spec-tag">Infrastructure Security</div>
+    </div>
+ 
+    <!-- Main Row: QR + Info -->
+    <div class="main-row">
+      <div class="qr-section">
+        <div class="qr-frame">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACkAKQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAcICf/EADAQAAACBQoEBwEAAAAAAAAAABETABIUFRYCBwgXISZBRWFjCUeFxBg4YmZnpeST/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/ANloQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhA5m0ZZi66YgvS4nMzZe0nHG7khUCtRWwC2zeBj5R+g/Qjhl8wem90mM0DZngY+UfoP0I4ZfMHpvdI4ZfMHpvdI4ZfMHpvdIFmpNT6VLQ/dZ+vlpzBmJJK25awm6AriNmM6MsxddMQXpcTmZsvaTjjdyQqBWorYBbGU7MIGM/Oj7Eg7qTW2fxLUZfUK+AWvHP8AF33/AOdHku99xj01kY/7GLtXpBTEbHku99xj01kY/wCxi7V6QUxGwLNRln0rpiC6ziczNmDSccbtyFQK1FbALcZ0ZZi66YgvS4nMzZe0nHG7khUCtRWwC1Rln0qWiC6z9fLNmDMSSbty1hN0BXEbLNxNOX3Uu1QHku99xj01kY/7GLtXpBTEbHnR9iQd1JrbP4lqMvqFfALXgY+UfoP0JGaMsxddMQXpcTmZsvaTjjdyQqBWorYBaGzKMsxdS0QXpfr5ZsvZiSTdyWsJugK4jZjOjLMXXTEF6XE5mbL2k443ckKgVqK2AW2bhl8wem90jhl8wem90gPAx8o/QfoR4GPlH6D9CYzTZnDL5g9N7pAcMvmD03uk2YmM+GXzB6b3SbMQCEIQCEIQMZ8MvmD03ukeBj5R+g/QjwMfKP0H6EeBj5R+g/QgWajLMXUtEF6X6+WbL2Ykk3clrCboCuI2Rnhl8wem90jwMfKP0H6Es1GWYupaIL0v18s2XsxJJu5LWE3QFcRsDGdGWfSpaILrP18s2YMxJJu3LWE3QFcRsUZZi66YgvS4nMzZe0nHG7khUCtRWwC1Rln0qWiC6z9fLNmDMSSbty1hN0BXEbLNwy+YPTe6QIzSamLqWh+9L9fLTl7MSSVuS1hN0BXEbFGWfSpaILrP18s2YMxJJu3LWE3QFcRss3DL5g9N7pHDL5g9N7pAs1JqfSpaH7rP18tOYMxJJW3LWE3QFcRsjPnR9iQd1JrbP4lqMvqFfALbNRlmLqWiC9L9fLNl7MSSbuS1hN0BXEbIz5LvfcY9NZGP+xi7V6QUxGwHDL5g9N7pHnR9iQd1JrbP4lqMvqFfALYzRln0qWiC6z9fLNmDMSSbty1hN0BXEbLN5LvfcY9NZGP+xi7V6QUxGwNmJjPhl8wem90lmoyzF1LRBel+vlmy9mJJN3Jawm6AriNkZ8DHyj9B+hAeBj5R+g/QlmoyzF1LRBel+vlmy9mJJN3Jawm6AriNkZ8DHyj9B+hHgY+UfoP0IDhl8wem90mzEjNGWYupaIL0v18s2XsxJJu5LWE3QFcRssyAQhCAQhCBjPyXe+4x6ayMf9jF2r0gpiNkZoyzF10xBelxOZmy9pOON3JCoFaitgFuzKMs+ldMQXWcTmZswaTjjduQqBWorYBbGfOj7Eg7qTW2fxLUZfUK+AWhGaTUxdS0P3pfr5acvZiSStyWsJugK4jZZvJd77jHprIx/wBjF2r0gpiNmM0s1JqYupaH70v18tOXsxJJW5LWE3QFcRsDZlJqYuumH70uJzNOXtJxxW5IVArUVsAtxnSamLqWh+9L9fLTl7MSSVuS1hN0BXEbLN45/i77/wDOjzo+xIO6k1tn8S1GX1CvgFoRmjLMXXTEF6XE5mbL2k443ckKgVqK2AW2bwMfKP0H6E2YmM+Jpy+6l2qBGaMsxddMQXpcTmZsvaTjjdyQqBWorYBapNT6V0w/dZxOZpzBpOOK25CoFaitgFtm4ZfMHpvdJsxAjNJqfSpaH7rP18tOYMxJJW3LWE3QFcRsxnSamLqWh+9L9fLTl7MSSVuS1hN0BXEbIymzOGXzB6b3SBsxOM6dMqTU+lS0P3Wfr5acwZiSStuWsJugK4jYoyzF1LRBel+vlmy9mJJN3Jawm6AriNgYzpNTF1LQ/el+vlpy9mJJK3Jawm6AriNlm4ZfMHpvdJGaMs+lS0QXWfr5ZswZiSTduWsJugK4jYoyzF10xBelxOZmy9pOON3JCoFaitgFobMoyz6V0xBdZxOZmzBpOON25CoFaitgFtmQhAIQhAIQhAxnwy+YPTe6SzUZZ9K6Ygus4nMzZg0nHG7chUCtRWwC3GdGWfSpaILrP18s2YMxJJu3LWE3QFcRss3DL5g9N7pAs1GWfSumILrOJzM2YNJxxu3IVArUVsAtUZZi6logvS/XyzZezEkm7ktYTdAVxGzGdJqfSumH7rOJzNOYNJxxW3IVArUVsAts3ku99xj01kY/7GLtXpBTEbAjNJqfSumH7rOJzNOYNJxxW3IVArUVsAt6ZJGaTUxddMP3pcTmacvaTjityQqBWorYBbZkCM0ZZ9K6Ygus4nMzZg0nHG7chUCtRWwC1SamLrph+9LiczTl7SccVuSFQK1FbALYz50fYkHdSa2z+JajL6hXwC2M0mp9K6Yfus4nM05g0nHFbchUCtRWwC0IynTKk1PpUtD91n6+WnMGYkkrblrCboCuI2YzoyzF10xBelxOZmy9pOON3JCoFaitgFvTJAxn5LvfcY9NZGP+xi7V6QUxGyzUmp9Klofus/Xy05gzEklbctYTdAVxGzGdGWfSpaILrP18s2YMxJJu3LWE3QFcRss3DL5g9N7pAjNJqYupaH70v18tOXsxJJW5LWE3QFcRss3nR9iQd1JrbP4lqMvqFfALcZpZqMs+lS0QXWfr5ZswZiSTduWsJugK4jYCk1MXUtD96X6+WnL2YkkrclrCboCuI2bMpNT6VLQ/dZ+vlpzBmJJK25awm6AriNkZ8l3vuMemsjH/AGMXavSCmI2POj7Eg7qTW2fxLUZfUK+AWg4ZfMHpvdJsxCEAhCEAhCEDGfjn+Lvv/wA6RmjLMXXTEF6XE5mbL2k443ckKgVqK2AW2bhl8wem90kZoyzF10xBelxOZmy9pOON3JCoFaitgFoWbyXe+4x6ayMf9jF2r0gpiNlmoyzF1LRBel+vlmy9mJJN3Jawm6AriNmM6MsxddMQXpcTmZsvaTjjdyQqBWorYBbZvAx8o/QfoQHjn+Lvv/zpGaTU+ldMP3WcTmacwaTjituQqBWorYBbZvJd77jHprIx/wBjF2r0gpiNjzo+xIO6k1tn8S1GX1CvgFobMTGfnR9iQd1JrbP4lqMvqFfALbNRln0rpiC6ziczNmDSccbtyFQK1FbALeZqBszzo+xIO6k1tn8S1GX1CvgFrxz/ABd9/wDnSzUZZi6logvS/XyzZezEkm7ktYTdAVxGxRln0rpiC6ziczNmDSccbtyFQK1FbALQUZZ9K6Ygus4nMzZg0nHG7chUCtRWwC3GdJqYupaH70v18tOXsxJJW5LWE3QFcRsUmp9K6Yfus4nM05g0nHFbchUCtRWwC2zcMvmD03ukCM0mpi6lofvS/Xy05ezEklbktYTdAVxGxSan0rph+6ziczTmDSccVtyFQK1FbALbN4GPlH6D9COJpy+6l2qA8l3vuMemsjH/AGMXavSCmI2WajLPpXTEF1nE5mbMGk443bkKgVqK2AW4zoyz6VLRBdZ+vlmzBmJJN25awm6AriNkZQNmcMvmD03uk2YkZoyz6V0xBdZxOZmzBpOON25CoFaitgFtmQCEIQCEIQMZ8MvmD03ukeS733GPTWRj/sYu1ekFMRscMvmD03uks1GWfSumILrOJzM2YNJxxu3IVArUVsAtDGdJqfSumH7rOJzNOYNJxxW3IVArUVsAts3ku99xj01kY/7GLtXpBTEbLNSan0qWh+6z9fLTmDMSSVty1hN0BXEbMZ0mpi6lofvS/Xy05ezEklbktYTdAVxGwLNxNOX3Uu1SM0mpi6lofvS/Xy05ezEklbktYTdAVxGyzedH2JB3Umts/iWoy+oV8AteS733GPTWRj/sYu1ekFMRsBxNOX3Uu1SzUZZi6logvS/XyzZezEkm7ktYTdAVxGzGdGWYuumIL0uJzM2XtJxxu5IVArUVsAtUZZi66YgvS4nMzZe0nHG7khUCtRWwC0FJqfSumH7rOJzNOYNJxxW3IVArUVsAtUmp9K6Yfus4nM05g0nHFbchUCtRWwC3ZlGWYupaIL0v18s2XsxJJu5LWE3QFcRsUmp9Klofus/Xy05gzEklbctYTdAVxGwFGWfSumILrOJzM2YNJxxu3IVArUVsAtxnRln0qWiC6z9fLNmDMSSbty1hN0BXEbFGWfSpaILrP18s2YMxJJu3LWE3QFcRsUZZ9Klogus/XyzZgzEkm7ctYTdAVxGwLN4GPlH6D9CWajLPpXTEF1nE5mbMGk443bkKgVqK2AWqTU+lS0P3Wfr5acwZiSStuWsJugK4jZGfHP8AF33/AOdAjNJqYupaH70v18tOXsxJJW5LWE3QFcRs2ZSamLrph+9LiczTl7SccVuSFQK1FbALYz5LvfcY9NZGP+xi7V6QUxGx50fYkHdSa2z+JajL6hXwC0HDL5g9N7pNmJGaMs+ldMQXWcTmZswaTjjduQqBWorYBbZkAhCEAhCECM0ZZi6logvS/XyzZezEkm7ktYTdAVxGxSamLrph+9LiczTl7SccVuSFQK1FbALcZ0ZZi66YgvS4nMzZe0nHG7khUCtRWwC2zeBj5R+g/QgWak1MXXTD96XE5mnL2k44rckKgVqK2AWqMsxdS0QXpfr5ZsvZiSTdyWsJugK4jZGfAx8o/QfoRwy+YPTe6QIzRln0qWiC6z9fLNmDMSSbty1hN0BXEbLNwy+YPTe6SM0mp9K6Yfus4nM05g0nHFbchUCtRWwC3ZlJqYuumH70uJzNOXtJxxW5IVArUVsAtCM8MvmD03ukeBj5R+g/QkZpNTF1LQ/el+vlpy9mJJK3Jawm6AriNmzKTUxddMP3pcTmacvaTjityQqBWorYBaGM6TU+ldMP3WcTmacwaTjituQqBWorYBaoyz6VLRBdZ+vlmzBmJJN25awm6AriNmzKMs+ldMQXWcTmZswaTjjduQqBWorYBbjOjLPpUtEF1n6+WbMGYkk3blrCboCuI2BZvHP8Xff/AJ0jNJqYupaH70v18tOXsxJJW5LWE3QFcRsjKbM4mnL7qXaoEZoyzF10xBelxOZmy9pOON3JCoFaitgFtm8DHyj9B+hHDL5g9N7pLNRlmLqWiC9L9fLNl7MSSbuS1hN0BXEbAxnRlmLrpiC9LiczNl7SccbuSFQK1FbALbN50fYkHdSa2z+JajL6hXwC2M0ZZ9Klogus/XyzZgzEkm7ctYTdAVxGxRlmLrpiC9LiczNl7SccbuSFQK1FbALQs3DL5g9N7pNmJGaMs+ldMQXWcTmZswaTjjduQqBWorYBbZkAhCEAhCEDGfDL5g9N7pMZpszhl8wem90jwMfKP0H6EBwy+YPTe6Rwy+YPTe6SzUZZi6logvS/XyzZezEkm7ktYTdAVxGyM8MvmD03ukCM0ZZi66YgvS4nMzZe0nHG7khUCtRWwC1SamLqWh+9L9fLTl7MSSVuS1hN0BXEbLN4GPlH6D9CRmk1MXUtD96X6+WnL2YkkrclrCboCuI2Bsyk1MXXTD96XE5mnL2k44rckKgVqK2AWxnzo+xIO6k1tn8S1GX1CvgFuzE4zoBOmVJqfSpaH7rP18tOYMxJJW3LWE3QFcRsxnRlmLrpiC9LiczNl7SccbuSFQK1FbALemSBGaMs+ldMQXWcTmZswaTjjduQqBWorYBbGfJd77jHprIx/wBjF2r0gpiNjyXe+4x6ayMf9jF2r0gpiNjhl8wem90gYzTZngY+UfoP0JZqTU+lS0P3Wfr5acwZiSStuWsJugK4jZGfAx8o/QfoQIzRlmLrpiC9LiczNl7SccbuSFQK1FbALdmUmp9Klofus/Xy05gzEklbctYTdAVxGzGdJqfSumH7rOJzNOYNJxxW3IVArUVsAts3DL5g9N7pAcMvmD03uk2YhCAQhCAQhCBjPwMfKP0H6EeBj5R+g/QmzEIGM/Ax8o/QfoSzUZZi6logvS/XyzZezEkm7ktYTdAVxGyzIQMZ+Bj5R+g/QjwMfKP0H6E2YhAJGaTUxddMP3pcTmacvaTjityQqBWorYBbZkIGM/Ax8o/QfoTZiEIBIzRlmLqWiC9L9fLNl7MSSbuS1hN0BXEbLMhAxn4GPlH6D9CWak1MXXTD96XE5mnL2k44rckKgVqK2AW2ZCBGaTUxddMP3pcTmacvaTjityQqBWorYBapNTF10w/elxOZpy9pOOK3JCoFaitgFtmQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgf/Z"" alt="QR Code - Cyber Portfolio" />
+        </div>
+        <div class="qr-label">Scan to explore</div>
+      </div>
+ 
+      <div class="info-section">
+        <div>
+          <div class="portfolio-label">Portfolio</div>
+          <div class="portfolio-text">Explore my cyber<br>threat hunting portfolio</div>
+        </div>
+ 
+        <a class="contact-item" href="https://www.linkedin.com/in/john-mckenney-168a67301" target="_blank" style="text-decoration:none;">
+          <span class="contact-icon">🔗</span>
+          <div class="contact-details">
+            <span class="contact-platform">LinkedIn</span>
+            <span class="contact-value">john-mckenney-168a67301</span>
+          </div>
+        </a>
+      </div>
+    </div>
+ 
+    <!-- Footer -->
+    <div class="card-footer">
+      <span class="footer-id">ID // JMCK-2026</span>
+      <span class="footer-tagline">Detect · Hunt · Secure</span>
+    </div>
+  </div>
+</div>
+ 
+</body>
+</html>
