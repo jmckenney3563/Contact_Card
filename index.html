@@ -9,16 +9,17 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: #020b14;
+  html, body {
+    width: 100%;
     min-height: 100vh;
+    background: #020b14;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Rajdhani', sans-serif;
-    overflow: hidden;
   }
 
+  /* Grid background */
   body::before {
     content: '';
     position: fixed;
@@ -30,48 +31,50 @@
     animation: gridPulse 8s ease-in-out infinite;
     z-index: 0;
   }
-
   @keyframes gridPulse {
     0%, 100% { opacity: 0.6; }
     50% { opacity: 1; }
   }
 
+  /* Scan line */
   body::after {
     content: '';
     position: fixed;
-    top: -100%;
-    left: 0; right: 0;
+    top: -100%; left: 0; right: 0;
     height: 3px;
     background: linear-gradient(90deg, transparent, #00ffb4, #00e5ff, #00ffb4, transparent);
     animation: scanLine 5s linear infinite;
     z-index: 1;
     opacity: 0.6;
   }
-
   @keyframes scanLine {
     0% { top: -2%; }
     100% { top: 102%; }
   }
 
+  /* ── Card wrapper ── */
   .card-wrapper {
     position: relative;
     z-index: 2;
-    animation: cardReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    width: 100%;
+    max-width: 740px;
+    padding: 16px;
+    animation: cardReveal 1s cubic-bezier(0.16,1,0.3,1) forwards;
     opacity: 0;
   }
-
   @keyframes cardReveal {
     from { opacity: 0; transform: translateY(30px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
+  /* ── Card ── */
   .card {
     position: relative;
-    width: 720px;
+    width: 100%;
     background: linear-gradient(145deg, #051220 0%, #030d1a 50%, #061828 100%);
     border: 1px solid rgba(0,255,180,0.25);
     border-radius: 2px;
-    padding: 40px 48px;
+    padding: clamp(24px, 5vw, 48px) clamp(20px, 5vw, 48px);
     overflow: hidden;
     box-shadow:
       0 0 0 1px rgba(0,229,255,0.08),
@@ -80,18 +83,19 @@
       inset 0 1px 0 rgba(0,255,180,0.15);
   }
 
+  /* Corner brackets */
   .card::before, .card::after,
   .card-corner-br, .card-corner-tl {
     content: '';
     position: absolute;
-    width: 22px; height: 22px;
+    width: 20px; height: 20px;
     border-color: #00ffb4;
     border-style: solid;
   }
-  .card::before { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
-  .card::after  { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
-  .card-corner-br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
-  .card-corner-tl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+  .card::before    { top: 10px;    left: 10px;  border-width: 2px 0 0 2px; }
+  .card::after     { top: 10px;    right: 10px; border-width: 2px 2px 0 0; }
+  .card-corner-br  { bottom: 10px; right: 10px; border-width: 0 2px 2px 0; }
+  .card-corner-tl  { bottom: 10px; left: 10px;  border-width: 0 0 2px 2px; }
 
   .glow-orb {
     position: absolute;
@@ -101,15 +105,14 @@
     pointer-events: none;
   }
 
-  /* ── TOP ROW: headshot + identity ── */
+  /* ── Top row: headshot + identity ── */
   .top-row {
     display: flex;
     align-items: center;
-    gap: 28px;
-    margin-bottom: 28px;
+    gap: clamp(16px, 4vw, 28px);
+    margin-bottom: clamp(20px, 4vw, 30px);
     animation: fadeUp 0.8s 0.3s cubic-bezier(0.16,1,0.3,1) both;
   }
-
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -119,9 +122,9 @@
   .headshot-wrap {
     flex-shrink: 0;
     position: relative;
-    width: 110px; height: 110px;
+    width: clamp(80px, 15vw, 110px);
+    height: clamp(80px, 15vw, 110px);
   }
-
   .headshot-wrap::before {
     content: '';
     position: absolute;
@@ -131,11 +134,7 @@
     animation: rotateBorder 4s linear infinite;
     z-index: 0;
   }
-
-  @keyframes rotateBorder {
-    to { transform: rotate(360deg); }
-  }
-
+  @keyframes rotateBorder { to { transform: rotate(360deg); } }
   .headshot-wrap::after {
     content: '';
     position: absolute;
@@ -144,7 +143,6 @@
     background: #030d1a;
     z-index: 1;
   }
-
   .headshot-wrap img {
     position: absolute;
     inset: 4px;
@@ -156,8 +154,6 @@
     z-index: 2;
     filter: saturate(1.1) contrast(1.05);
   }
-
-  /* Outer glow ring */
   .headshot-glow {
     position: absolute;
     inset: -12px;
@@ -166,35 +162,33 @@
     z-index: 0;
     animation: glowPulse 3s ease-in-out infinite;
   }
-
   @keyframes glowPulse {
     0%, 100% { opacity: 0.6; transform: scale(1); }
     50%       { opacity: 1;   transform: scale(1.06); }
   }
 
   /* Identity */
-  .identity { flex: 1; }
+  .identity { flex: 1; min-width: 0; }
 
   .status-indicator {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
+    font-size: clamp(8px, 1.8vw, 10px);
+    letter-spacing: 0.18em;
     color: #00ffb4;
     text-transform: uppercase;
   }
-
   .status-dot {
+    flex-shrink: 0;
     width: 6px; height: 6px;
     background: #00ffb4;
     border-radius: 50%;
     box-shadow: 0 0 8px #00ffb4;
     animation: blink 2s ease-in-out infinite;
   }
-
   @keyframes blink {
     0%, 100% { opacity: 1; }
     50%       { opacity: 0.3; }
@@ -203,21 +197,23 @@
   .name {
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
-    font-size: 30px;
+    font-size: clamp(18px, 5vw, 30px);
     letter-spacing: 0.04em;
     line-height: 1.1;
     color: #f0fbff;
     text-shadow: 0 0 30px rgba(0,229,255,0.3);
-    margin-bottom: 6px;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-
   .name span { color: #00e5ff; }
 
   .title {
     font-family: 'Rajdhani', sans-serif;
     font-weight: 300;
-    font-size: 14px;
-    letter-spacing: 0.22em;
+    font-size: clamp(10px, 2.5vw, 14px);
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: rgba(200,230,240,0.6);
   }
@@ -226,37 +222,35 @@
   .divider {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin: 0 0 22px;
+    gap: 10px;
+    margin-bottom: clamp(16px, 3vw, 22px);
     animation: fadeUp 0.8s 0.45s cubic-bezier(0.16,1,0.3,1) both;
   }
-
   .divider-line {
     flex: 1; height: 1px;
     background: linear-gradient(90deg, rgba(0,255,180,0.5), rgba(0,229,255,0.2), transparent);
   }
-
   .divider-icon {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
+    font-size: clamp(8px, 1.8vw, 10px);
     color: rgba(0,255,180,0.5);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
   }
 
   /* ── Spec tags ── */
   .specializations {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 8px;
+    margin-bottom: clamp(20px, 4vw, 30px);
     animation: fadeUp 0.8s 0.55s cubic-bezier(0.16,1,0.3,1) both;
   }
-
   .spec-tag {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    padding: 6px 14px;
+    font-size: clamp(9px, 1.8vw, 11px);
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
     border: 1px solid rgba(0,229,255,0.3);
     color: #00e5ff;
     background: rgba(0,229,255,0.06);
@@ -264,7 +258,6 @@
     clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
     transition: all 0.3s ease;
   }
-
   .spec-tag:hover {
     background: rgba(0,229,255,0.14);
     border-color: rgba(0,229,255,0.7);
@@ -275,41 +268,40 @@
   /* ── Bottom row: QR + info ── */
   .main-row {
     display: flex;
-    gap: 36px;
+    flex-wrap: wrap;
+    gap: clamp(20px, 4vw, 36px);
     align-items: flex-start;
     animation: fadeUp 0.8s 0.65s cubic-bezier(0.16,1,0.3,1) both;
   }
 
+  /* QR */
   .qr-section {
-    flex-shrink: 0;
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
   }
-
   .qr-frame {
     position: relative;
-    padding: 10px;
+    padding: 9px;
     background: #f8fcff;
     border: 1px solid rgba(0,255,180,0.3);
     box-shadow: 0 0 0 1px rgba(0,229,255,0.15), 0 0 20px rgba(0,255,180,0.1);
     border-radius: 2px;
   }
-
   .qr-frame::before { content:''; position:absolute; top:-1px; left:-1px; width:14px; height:14px; border-top:2px solid #00ffb4; border-left:2px solid #00ffb4; }
   .qr-frame::after  { content:''; position:absolute; bottom:-1px; right:-1px; width:14px; height:14px; border-bottom:2px solid #00ffb4; border-right:2px solid #00ffb4; }
-
   .qr-frame img {
     display: block;
-    width: 140px; height: 140px;
+    width: clamp(110px, 20vw, 140px);
+    height: clamp(110px, 20vw, 140px);
     image-rendering: pixelated;
   }
-
   .qr-label {
     font-family: 'Share Tech Mono', monospace;
     font-size: 9px;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     color: rgba(0,255,180,0.6);
     text-transform: uppercase;
     text-align: center;
@@ -317,25 +309,26 @@
 
   /* Info */
   .info-section {
-    flex: 1;
+    flex: 1 1 200px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     padding-top: 4px;
+    min-width: 0;
   }
-
   .portfolio-label {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 13px; font-weight: 400;
+    font-size: clamp(10px, 2vw, 13px);
+    font-weight: 400;
     letter-spacing: 0.12em;
     color: rgba(200,225,240,0.55);
     text-transform: uppercase;
-    margin-bottom: -6px;
+    margin-bottom: -4px;
   }
-
   .portfolio-text {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 18px; font-weight: 600;
+    font-size: clamp(14px, 3vw, 18px);
+    font-weight: 600;
     letter-spacing: 0.04em;
     color: rgba(240,248,255,0.9);
     line-height: 1.3;
@@ -345,14 +338,14 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
+    padding: 11px 14px;
     border: 1px solid rgba(0,229,255,0.15);
     background: rgba(0,229,255,0.03);
     position: relative;
     transition: all 0.3s ease;
     text-decoration: none;
+    min-width: 0;
   }
-
   .contact-item::before {
     content: '';
     position: absolute;
@@ -360,51 +353,57 @@
     width: 2px;
     background: linear-gradient(180deg, #00ffb4, #00e5ff);
   }
-
   .contact-item:hover {
     background: rgba(0,229,255,0.08);
     border-color: rgba(0,229,255,0.4);
     box-shadow: 0 0 20px rgba(0,229,255,0.08);
   }
-
-  .contact-icon { font-size: 15px; flex-shrink: 0; }
-
-  .contact-details { display: flex; flex-direction: column; gap: 1px; }
-
+  .contact-icon { font-size: 14px; flex-shrink: 0; }
+  .contact-details { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
   .contact-platform {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 9px; letter-spacing: 0.18em;
+    font-size: 9px; letter-spacing: 0.16em;
     color: #00ffb4; text-transform: uppercase;
   }
-
   .contact-value {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 14px; font-weight: 600;
+    font-size: clamp(11px, 2.2vw, 14px);
+    font-weight: 600;
     letter-spacing: 0.04em;
     color: rgba(200,230,250,0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* Footer */
+  /* ── Footer ── */
   .card-footer {
-    margin-top: 28px;
-    padding-top: 14px;
+    margin-top: clamp(18px, 3vw, 28px);
+    padding-top: 12px;
     border-top: 1px solid rgba(0,255,180,0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
     animation: fadeUp 0.8s 0.75s cubic-bezier(0.16,1,0.3,1) both;
   }
-
-  .footer-id {
+  .footer-id, .footer-tagline {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 9px; letter-spacing: 0.18em;
-    color: rgba(0,255,180,0.3); text-transform: uppercase;
+    font-size: clamp(7px, 1.5vw, 9px);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
+  .footer-id      { color: rgba(0,255,180,0.3); }
+  .footer-tagline { color: rgba(0,229,255,0.25); }
 
-  .footer-tagline {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 9px; letter-spacing: 0.12em;
-    color: rgba(0,229,255,0.25); text-transform: uppercase;
+  /* ── Mobile: stack QR below info on very small screens ── */
+  @media (max-width: 400px) {
+    .name { font-size: 16px; }
+    .main-row { flex-direction: column; align-items: center; }
+    .info-section { align-items: center; text-align: center; }
+    .contact-item { justify-content: center; }
+    .portfolio-text { text-align: center; }
   }
 </style>
 </head>
@@ -416,7 +415,7 @@
     <div class="card-corner-tl"></div>
     <div class="glow-orb"></div>
 
-    <!-- TOP ROW: headshot + name -->
+    <!-- Top row -->
     <div class="top-row">
       <div class="headshot-wrap">
         <div class="headshot-glow"></div>
@@ -446,7 +445,7 @@
       <div class="spec-tag">Infrastructure Security</div>
     </div>
 
-    <!-- Bottom row: QR + info -->
+    <!-- Bottom row -->
     <div class="main-row">
       <div class="qr-section">
         <div class="qr-frame">
@@ -454,13 +453,11 @@
         </div>
         <div class="qr-label">Scan to explore</div>
       </div>
-
       <div class="info-section">
         <div>
           <div class="portfolio-label">Portfolio</div>
           <div class="portfolio-text">Explore my cyber<br>threat hunting portfolio</div>
         </div>
-
         <a class="contact-item" href="https://www.linkedin.com/in/john-mckenney-168a67301" target="_blank">
           <span class="contact-icon">🔗</span>
           <div class="contact-details">
